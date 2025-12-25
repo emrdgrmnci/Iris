@@ -20,6 +20,7 @@ principles and [design/](design/) for feature specifications.
 * **Persistent State** - Remembers size, position, and camera selection
 * **Sound Indicator** - Visual indicator around the mirror view to show when
   microphone is picking up sound
+* **Mirrored view** - Option to switch between mirrored and unmirrored view.
 
 ## Requirements
 
