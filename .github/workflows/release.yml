@@ -16,6 +16,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0  # Fetch all history for proper versioning
 
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
@@ -54,6 +57,62 @@ jobs:
           echo ""
           echo "Created archive:"
           ls -lh "Iris-${{ github.ref_name }}.zip"
+
+      - name: Calculate SHA256 checksum
+        id: sha256
+        run: |
+          cd Iris/build/Build/Products/Release
+          SHA256=$(shasum -a 256 "Iris-${{ github.ref_name }}.zip" | awk '{print $1}')
+          echo "sha256=$SHA256" >> $GITHUB_OUTPUT
+          echo "SHA256: $SHA256"
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION="${{ github.ref_name }}"
+          # Remove 'v' prefix if present
+          VERSION=${VERSION#v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Update Homebrew cask
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          SHA256="${{ steps.sha256.outputs.sha256 }}"
+
+          # Update version
+          sed -i '' "s/version \".*\"/version \"$VERSION\"/" Casks/iris.rb
+
+          # Update SHA256 (handle empty string case)
+          if [ -n "$SHA256" ]; then
+            sed -i '' "s/sha256 \".*\"/sha256 \"$SHA256\"/" Casks/iris.rb
+          fi
+
+          echo "Updated cask:"
+          cat Casks/iris.rb
+
+      - name: Commit cask update
+        run: |
+          # Determine default branch
+          DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@' || echo "main")
+          echo "Default branch: $DEFAULT_BRANCH"
+
+          # Checkout default branch to commit the cask update
+          git checkout "$DEFAULT_BRANCH" || git checkout main || git checkout master || {
+            echo "Warning: Could not checkout default branch, skipping cask update commit"
+            exit 0
+          }
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Casks/iris.rb
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update Homebrew cask to ${{ steps.version.outputs.version }}"
+            git push origin "$DEFAULT_BRANCH"
+          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

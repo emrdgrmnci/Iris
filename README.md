@@ -25,7 +25,18 @@ principles and [design/](design/) for feature specifications.
 
 ## Installation
 
-### Download Pre-built App (Recommended)
+### Homebrew (Recommended)
+
+Install via Homebrew using the personal tap:
+
+```bash
+brew tap ahmetb/iris
+brew install --cask iris
+```
+
+This method handles the Gatekeeper bypass automatically.
+
+### Download Pre-built App
 
 1. Download the latest `Iris-vX.X.X.zip` from the [Releases](../../releases) page
 2. Unzip the file
@@ -114,7 +125,13 @@ principles and [design/](design/) for feature specifications.
 iris/
 ├── AGENTS.md                 # Development principles
 ├── README.md                 # This file
+├── RELEASING.md              # Release process documentation
 ├── design/                   # Feature design documents
+├── Casks/                    # Homebrew cask formula
+│   └── iris.rb
+├── .github/
+│   └── workflows/
+│       └── release.yml       # GitHub Actions release workflow
 ├── Iris/                     # Xcode project
 │   ├── Iris.xcodeproj
 │   ├── Iris/                 # Source code
@@ -131,8 +148,9 @@ iris/
 
 ## Creating a Release
 
-Releases are automated via GitHub Actions. To create a new release:
+See [RELEASING.md](RELEASING.md) for detailed release instructions.
 
+Quick version:
 ```bash
 # Tag the release
 git tag v1.0.0
@@ -144,6 +162,7 @@ git push origin v1.0.0
 GitHub Actions will automatically:
 - Build the app on a macOS runner
 - Create a zip archive
+- Update the Homebrew cask with new version and SHA256
 - Publish a GitHub Release with the zip attached
 
 ## Troubleshooting
