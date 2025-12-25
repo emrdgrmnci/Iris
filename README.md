@@ -1,0 +1,114 @@
+# Iris.app
+
+Iris is a macOS application that displays your webcam feed in a circular, always-on-top window.
+
+## Features
+
+* **Menu Bar Only** - Lives in the menu bar, doesn't occupy the Dock
+* **Always On Top** - Window stays above other applications
+* **Circular Window** - Perfectly circular shape with smooth edges
+* **Resizable** - Drag from the edges of the circle to resize
+* **Toggle Visibility** - Click menu bar icon to show/hide window
+* **Camera Selection** - Choose from multiple camera sources
+* **Launch at Login** - Optionally start on system login
+* **Persistent State** - Remembers size, position, and camera selection
+
+## Requirements
+
+* macOS 13.0 or later
+* **Full Xcode installation** (not just Command Line Tools)
+  - Download from the [Mac App Store](https://apps.apple.com/app/xcode/id497799835)
+  - Command Line Tools alone are not sufficient for building macOS apps
+
+## Building
+
+### First Time Setup
+
+1. Install Xcode from the Mac App Store
+2. Open Xcode and agree to the license agreement
+3. Set the command line tools path:
+   ```bash
+   sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+   ```
+
+### Build Commands
+
+```bash
+# Build the app
+./build.sh
+
+# Build and run
+./run.sh
+
+# Clean build artifacts
+./clean.sh
+```
+
+The built application will be located at `Iris/build/Release/Iris.app`.
+
+## Usage
+
+1. Launch the app using `./run.sh` or by opening `Iris.app`
+2. Grant camera permissions when prompted
+3. The app icon will appear in your menu bar (top right)
+4. Click the icon to toggle the window visibility
+5. Right-click the icon (or click and hold) to access:
+   - Camera selection
+   - Launch at login setting
+   - Quit option
+
+### Interacting with the Window
+
+* **Move**: Click and drag anywhere inside the circle
+* **Resize**: Click and drag from the edge of the circle
+* **Hide**: Click the menu bar icon
+
+## Camera Permissions
+
+On first launch, macOS will prompt you to grant camera access. If you deny permission:
+1. Open System Settings
+2. Go to Privacy & Security > Camera
+3. Enable camera access for Iris
+
+## Development
+
+This is an LLM-agent-coded project. See [AGENTS.md](AGENTS.md) for development principles and [design/](design/) for feature specifications.
+
+### Project Structure
+
+```
+iris/
+├── AGENTS.md                 # Development principles
+├── README.md                 # This file
+├── design/                   # Feature design documents
+├── Iris/                     # Xcode project
+│   ├── Iris.xcodeproj
+│   ├── Iris/                 # Source code
+│   │   ├── AppDelegate.swift
+│   │   ├── CameraManager.swift
+│   │   ├── CircularWindow.swift
+│   │   ├── MenuBarController.swift
+│   │   └── PreferencesManager.swift
+│   └── Iris.entitlements
+├── build.sh                  # Build script
+├── run.sh                    # Run script
+└── clean.sh                  # Clean script
+```
+
+## Troubleshooting
+
+### "xcodebuild requires Xcode" error
+Install full Xcode from the App Store, not just Command Line Tools.
+
+### App doesn't appear in menu bar
+The app is menu-bar-only (no Dock icon). Look for the eye icon (👁) in the top-right menu bar.
+
+### Camera not working
+Check System Settings > Privacy & Security > Camera and ensure Iris has permission.
+
+### Window disappeared
+Click the menu bar icon to show it again. The app remembers window position between launches.
+
+## License
+
+This project is open source and available for personal and commercial use.
