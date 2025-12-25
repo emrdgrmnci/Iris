@@ -30,7 +30,7 @@ principles and [design/](design/) for feature specifications.
 Install via Homebrew using the personal tap:
 
 ```bash
-brew tap ahmetb/iris
+brew tap ahmetb/iris https://github.com/ahmetb/Iris
 brew install --cask iris
 ```
 

@@ -165,7 +165,7 @@ https://github.com/ahmetb/Iris/releases
 Users can install via Homebrew:
 
 ```bash
-brew tap ahmetb/iris
+brew tap ahmetb/iris https://github.com/ahmetb/Iris
 brew install --cask iris
 ```
 
