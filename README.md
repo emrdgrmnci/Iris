@@ -4,7 +4,7 @@ Iris is a macOS application that displays your webcam feed in a circular,
 always-on-top window. It's a replacement for **Pearl** or **Hand Mirror** apps.
 
 <p align="center">
-  <img src="images/screenshot.png" alt="Iris Screenshot" width="400">
+  <img src="images/hero.png" alt="Iris Screenshot" width="400">
 </p>
 
 The project is entirely coded by an LLM agent. See [AGENTS.md](AGENTS.md) for development
